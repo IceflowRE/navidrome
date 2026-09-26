@@ -34,6 +34,7 @@ type SQLStore struct {
 	userProps    func() model.UserPropsRepository
 	scrobbleBuf  func() model.ScrobbleBufferRepository
 	scrobble     func() model.ScrobbleRepository
+	chart        func() model.ChartRepository
 	plugin       func() model.PluginRepository
 	artwork      func() model.ArtworkRepository
 	artworkQueue func() model.ArtworkQueueRepository
@@ -61,6 +62,7 @@ func newSQLStore(db dbx.Builder) *SQLStore {
 		userProps:    sync.OnceValue(func() model.UserPropsRepository { return NewUserPropsRepository(db) }),
 		scrobbleBuf:  sync.OnceValue(func() model.ScrobbleBufferRepository { return NewScrobbleBufferRepository(db) }),
 		scrobble:     sync.OnceValue(func() model.ScrobbleRepository { return NewScrobbleRepository(db) }),
+		chart:        sync.OnceValue(func() model.ChartRepository { return NewChartRepository(db) }),
 		plugin:       sync.OnceValue(func() model.PluginRepository { return NewPluginRepository(db) }),
 		artwork:      sync.OnceValue(func() model.ArtworkRepository { return NewArtworkRepository(db) }),
 		artworkQueue: sync.OnceValue(func() model.ArtworkQueueRepository { return NewArtworkQueueRepository(db) }),
@@ -141,6 +143,10 @@ func (s *SQLStore) ScrobbleBuffer() model.ScrobbleBufferRepository {
 
 func (s *SQLStore) Scrobble() model.ScrobbleRepository {
 	return s.scrobble()
+}
+
+func (s *SQLStore) Chart() model.ChartRepository {
+	return s.chart()
 }
 
 func (s *SQLStore) Plugin() model.PluginRepository {

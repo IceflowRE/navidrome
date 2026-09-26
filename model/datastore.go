@@ -34,6 +34,7 @@ type DataStore interface {
 	UserProps() UserPropsRepository
 	ScrobbleBuffer() ScrobbleBufferRepository
 	Scrobble() ScrobbleRepository
+	Chart() ChartRepository
 	Plugin() PluginRepository
 	Artwork() ArtworkRepository
 	ArtworkQueue() ArtworkQueueRepository

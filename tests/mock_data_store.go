@@ -30,6 +30,7 @@ type MockDataStore struct {
 	MockedPlugin         model.PluginRepository
 	MockedArtwork        model.ArtworkRepository
 	MockedArtworkQueue   model.ArtworkQueueRepository
+	MockedChart          model.ChartRepository
 	scrobbleBufferMu     sync.Mutex
 	repoMu               sync.Mutex
 
@@ -257,6 +258,19 @@ func (db *MockDataStore) Scrobble() model.ScrobbleRepository {
 	}
 	db.MockedScrobble = &MockScrobbleRepo{}
 	return db.MockedScrobble
+}
+
+func (db *MockDataStore) Chart() model.ChartRepository {
+	db.repoMu.Lock()
+	defer db.repoMu.Unlock()
+	if db.MockedChart != nil {
+		return db.MockedChart
+	}
+	if db.RealDS != nil {
+		return db.RealDS.Chart()
+	}
+	db.MockedChart = &MockChartRepo{}
+	return db.MockedChart
 }
 
 func (db *MockDataStore) Radio() model.RadioRepository {
